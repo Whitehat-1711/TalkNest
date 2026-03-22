@@ -40,30 +40,15 @@ pipeline {
         sh '''
           set -e
 
-          ssh -i "$SSH_KEY" "$SSH_USER@$DEPLOY_HOST" "DEPLOY_DIR='$DEPLOY_DIR' PM2_APP='$PM2_APP' bash -s" << 'EOF'
-            set -e
-            cd "$DEPLOY_DIR"
-
-            # Keep server-managed env files; update code from git.
-            git pull
-
-            npm install --prefix backend
-            npm install --prefix frontend
-            npm run build
-
-            if [ ! -f backend/.env ]; then
-              echo "Missing backend/.env in $DEPLOY_DIR/backend/.env"
-              exit 1
-            fi
-
-            if pm2 describe "$PM2_APP" >/dev/null 2>&1; then
-              pm2 restart "$PM2_APP" --update-env
-            else
-              pm2 start backend/src/index.js --name "$PM2_APP"
-            fi
-
-            pm2 save
-          EOF
+          ssh -i "$SSH_KEY" "$SSH_USER@$DEPLOY_HOST" "set -e; \
+            cd '$DEPLOY_DIR'; \
+            git pull; \
+            npm install --prefix backend; \
+            npm install --prefix frontend; \
+            npm run build; \
+            if [ ! -f backend/.env ]; then echo 'Missing backend/.env in $DEPLOY_DIR/backend/.env'; exit 1; fi; \
+            if pm2 describe '$PM2_APP' >/dev/null 2>&1; then pm2 restart '$PM2_APP' --update-env; else pm2 start backend/src/index.js --name '$PM2_APP'; fi; \
+            pm2 save"
         '''
         }
       }
