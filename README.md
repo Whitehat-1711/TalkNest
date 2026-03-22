@@ -1,27 +1,41 @@
-#  Full Stack Realtime Chat App 
+# Full Stack Realtime Chat App
 
-### Setup .env file
+### Environment Setup
 
-```js
-MONGODB_URI=...
+Create `backend/.env` from `backend/.env.example`:
+
+```bash
 PORT=5001
+MONGODB_URI=...
 JWT_SECRET=...
 
 CLOUDINARY_CLOUD_NAME=...
 CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
 
-NODE_ENV=development
+NODE_ENV=production
+CORS_ORIGIN=http://13.60.54.104
+COOKIE_SAME_SITE=lax
+COOKIE_SECURE=false
 ```
 
-### Build the app
+Create `frontend/.env` from `frontend/.env.example`:
 
-```shell
+```bash
+VITE_API_BASE_URL=http://13.60.54.104:5001/api
+VITE_SERVER_BASE_URL=http://13.60.54.104:5001
+```
+
+If frontend and backend are on different domains, set `COOKIE_SAME_SITE=none` and `COOKIE_SECURE=true`.
+
+### Build the App
+
+```bash
 npm run build
 ```
 
-### Start the app
+### Start the App
 
-```shell
+```bash
 npm start
 ```
