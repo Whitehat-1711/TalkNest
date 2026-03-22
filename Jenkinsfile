@@ -8,7 +8,6 @@ pipeline {
 
   environment {
     DEPLOY_HOST = '51.21.169.27'
-    DEPLOY_USER = 'ubuntu'
     DEPLOY_DIR = '/home/ubuntu/TalkNest'
     PM2_APP = 'chat-app'
   }
@@ -22,11 +21,14 @@ pipeline {
 
     stage('Prepare SSH') {
       steps {
-        sshagent(credentials: ['ec2-ssh-key']) {
+        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
           sh '''
             set -e
             mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
             ssh-keyscan -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+            chmod 600 ~/.ssh/known_hosts
+            chmod 600 "$SSH_KEY"
           '''
         }
       }
@@ -34,11 +36,11 @@ pipeline {
 
     stage('Deploy To EC2') {
       steps {
-        sshagent(credentials: ['ec2-ssh-key']) {
+        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
         sh '''
           set -e
 
-          ssh "$DEPLOY_USER@$DEPLOY_HOST" "DEPLOY_DIR='$DEPLOY_DIR' PM2_APP='$PM2_APP' bash -s" << 'EOF'
+          ssh -i "$SSH_KEY" "$SSH_USER@$DEPLOY_HOST" "DEPLOY_DIR='$DEPLOY_DIR' PM2_APP='$PM2_APP' bash -s" << 'EOF'
             set -e
             cd "$DEPLOY_DIR"
 
@@ -69,10 +71,10 @@ pipeline {
 
     stage('Health Check') {
       steps {
-        sshagent(credentials: ['ec2-ssh-key']) {
+        withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
         sh '''
           set -e
-          ssh "$DEPLOY_USER@$DEPLOY_HOST" 'sleep 3; curl -fsS http://localhost:5001/ >/dev/null'
+          ssh -i "$SSH_KEY" "$SSH_USER@$DEPLOY_HOST" 'sleep 3; curl -fsS http://localhost:5001/ >/dev/null'
         '''
         }
       }
@@ -85,8 +87,8 @@ pipeline {
     }
     failure {
       echo 'Deployment failed. Check console output and pm2 logs.'
-      sshagent(credentials: ['ec2-ssh-key']) {
-        sh 'ssh "$DEPLOY_USER@$DEPLOY_HOST" "pm2 logs \"$PM2_APP\" --lines 80 || true"'
+      withCredentials([sshUserPrivateKey(credentialsId: 'ec2-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+        sh 'ssh -i "$SSH_KEY" "$SSH_USER@$DEPLOY_HOST" "pm2 logs \"$PM2_APP\" --lines 80 || true"'
       }
     }
   }
