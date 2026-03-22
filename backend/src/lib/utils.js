@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 
 export const generateToken = (userId, res) => {
-  const sameSite = process.env.COOKIE_SAME_SITE || "strict";
-  const secureCookie =
-    process.env.COOKIE_SECURE === "true" || process.env.NODE_ENV !== "development";
+  const sameSite = process.env.COOKIE_SAME_SITE || "lax";
+  // Secure flag must be explicitly opted in via env so HTTP deployments can set cookies.
+  const secureCookie = process.env.COOKIE_SECURE === "true";
 
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: "7d",
