@@ -7,7 +7,7 @@ pipeline {
   }
 
   environment {
-    DEPLOY_HOST = '51.21.169.27'
+    DEPLOY_HOST = '51.20.210.18'
     DEPLOY_DIR = '/home/ubuntu/TalkNest'
     PM2_APP = 'chat-app'
   }
