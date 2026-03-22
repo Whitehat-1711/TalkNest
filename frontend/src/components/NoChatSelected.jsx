@@ -1,18 +1,25 @@
 import { MessageSquare } from "lucide-react";
+import { motion } from "framer-motion";
 
 const NoChatSelected = () => {
   return (
-    <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
+    <motion.div
+      className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50"
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="max-w-md text-center space-y-6">
         {/* Icon Display */}
         <div className="flex justify-center gap-4 mb-4">
           <div className="relative">
-            <div
-              className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center
-             justify-center animate-bounce"
+            <motion.div
+              className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center"
+              animate={{ y: [0, -6, 0], scale: [1, 1.03, 1] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
             >
               <MessageSquare className="w-8 h-8 text-primary " />
-            </div>
+            </motion.div>
           </div>
         </div>
 
@@ -22,7 +29,7 @@ const NoChatSelected = () => {
           Select a conversation from the sidebar to start chatting
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

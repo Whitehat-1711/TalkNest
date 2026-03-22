@@ -1,6 +1,8 @@
-                                                             import { useState } from "react";
+import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User } from "lucide-react";
+import { motion } from "framer-motion";
+import { containerStagger, itemFadeInUp } from "../lib/motion";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
@@ -24,15 +26,20 @@ const ProfilePage = () => {
   return (
     <div className="h-screen pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
-        <div className="bg-base-300 rounded-xl p-6 space-y-8">
-          <div className="text-center">
+        <motion.div
+          className="bg-base-300 rounded-xl p-6 space-y-8"
+          variants={containerStagger}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div className="text-center" variants={itemFadeInUp}>
             <h1 className="text-2xl font-semibold ">Profile</h1>
             <p className="mt-2">Your profile information</p>
-          </div>
+          </motion.div>
 
           {/* avatar upload section */}
 
-          <div className="flex flex-col items-center gap-4">
+          <motion.div className="flex flex-col items-center gap-4" variants={itemFadeInUp}>
             <div className="relative">
               <img
                 src={selectedImg || authUser.profilePic || "/avatar.png"}
@@ -63,9 +70,9 @@ const ProfilePage = () => {
             <p className="text-sm text-zinc-400">
               {isUpdatingProfile ? "Uploading..." : "Click the camera icon to update your photo"}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="space-y-6">
+          <motion.div className="space-y-6" variants={itemFadeInUp}>
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <User className="w-4 h-4" />
@@ -81,9 +88,9 @@ const ProfilePage = () => {
               </div>
               <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.email}</p>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="mt-6 bg-base-300 rounded-xl p-6">
+          <motion.div className="mt-6 bg-base-300 rounded-xl p-6" variants={itemFadeInUp}>
             <h2 className="text-lg font-medium  mb-4">Account Information</h2>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-zinc-700">
@@ -95,8 +102,8 @@ const ProfilePage = () => {
                 <span className="text-green-500">Active</span>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

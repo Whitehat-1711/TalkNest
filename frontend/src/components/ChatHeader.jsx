@@ -1,13 +1,19 @@
 import { X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
+import { motion } from "framer-motion";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useChatStore();
   const { onlineUsers } = useAuthStore();
 
   return (
-    <div className="p-2.5 border-b border-base-300">
+    <motion.div
+      className="p-2.5 border-b border-base-300"
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+    >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Avatar */}
@@ -27,11 +33,11 @@ const ChatHeader = () => {
         </div>
 
         {/* Close button */}
-        <button onClick={() => setSelectedUser(null)}>
+        <motion.button onClick={() => setSelectedUser(null)} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.94 }}>
           <X />
-        </button>
+        </motion.button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default ChatHeader;

@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+import { containerStagger, itemFadeInUp } from "../lib/motion";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,9 +40,14 @@ const SignUpPage = () => {
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8">
+        <motion.div
+          className="w-full max-w-md space-y-8"
+          variants={containerStagger}
+          initial="hidden"
+          animate="visible"
+        >
           {/* LOGO */}
-          <div className="text-center mb-8">
+          <motion.div className="text-center mb-8" variants={itemFadeInUp}>
             <div className="flex flex-col items-center gap-2 group">
               <div
                 className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
@@ -51,9 +58,9 @@ const SignUpPage = () => {
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
               <p className="text-base-content/60">Get started with your free account</p>
             </div>
-          </div>
+          </motion.div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <motion.form onSubmit={handleSubmit} className="space-y-6" variants={itemFadeInUp}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Full Name</span>
@@ -129,17 +136,17 @@ const SignUpPage = () => {
                 "Create Account"
               )}
             </button>
-          </form>
+          </motion.form>
 
-          <div className="text-center">
+          <motion.div className="text-center" variants={itemFadeInUp}>
             <p className="text-base-content/60">
               Already have an account?{" "}
               <Link to="/login" className="link link-primary">
                 Sign in
               </Link>
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* right side */}

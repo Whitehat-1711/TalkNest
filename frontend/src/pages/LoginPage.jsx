@@ -3,6 +3,8 @@ import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import { motion } from "framer-motion";
+import { containerStagger, itemFadeInUp } from "../lib/motion";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,9 +23,14 @@ const LoginPage = () => {
     <div className="h-screen grid lg:grid-cols-2">
       {/* Left Side - Form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8">
+        <motion.div
+          className="w-full max-w-md space-y-8"
+          variants={containerStagger}
+          initial="hidden"
+          animate="visible"
+        >
           {/* Logo */}
-          <div className="text-center mb-8">
+          <motion.div className="text-center mb-8" variants={itemFadeInUp}>
             <div className="flex flex-col items-center gap-2 group">
               <div
                 className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20
@@ -34,10 +41,10 @@ const LoginPage = () => {
               <h1 className="text-2xl font-bold mt-2">Welcome Back</h1>
               <p className="text-base-content/60">Sign in to your account</p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <motion.form onSubmit={handleSubmit} className="space-y-6" variants={itemFadeInUp}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Email</span>
@@ -95,17 +102,17 @@ const LoginPage = () => {
                 "Sign in"
               )}
             </button>
-          </form>
+          </motion.form>
 
-          <div className="text-center">
+          <motion.div className="text-center" variants={itemFadeInUp}>
             <p className="text-base-content/60">
               Don&apos;t have an account?{" "}
               <Link to="/signup" className="link link-primary">
                 Create account
               </Link>
             </p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Right Side - Image/Pattern */}
