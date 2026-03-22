@@ -14,7 +14,7 @@ CLOUDINARY_API_KEY=...
 CLOUDINARY_API_SECRET=...
 
 NODE_ENV=production
-CORS_ORIGIN=http://13.60.54.104
+CORS_ORIGIN=http://51.21.169.27
 COOKIE_SAME_SITE=lax
 COOKIE_SECURE=false
 ```
@@ -22,8 +22,8 @@ COOKIE_SECURE=false
 Create `frontend/.env` from `frontend/.env.example`:
 
 ```bash
-VITE_API_BASE_URL=http://13.60.54.104:5001/api
-VITE_SERVER_BASE_URL=http://13.60.54.104:5001
+VITE_API_BASE_URL=http://51.21.169.27:5001/api
+VITE_SERVER_BASE_URL=http://51.21.169.27:5001
 ```
 
 If frontend and backend are on different domains, set `COOKIE_SAME_SITE=none` and `COOKIE_SECURE=true`.
