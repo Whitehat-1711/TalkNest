@@ -32,3 +32,11 @@ export const THEMES = [
   "nord",
   "sunset",
 ];
+
+export const AI_ASSISTANT_USER = {
+  _id: "assistant-groq",
+  fullName: "TalkNest AI",
+  email: "assistant@talknest.ai",
+  profilePic: "/avatar.png",
+  isAssistant: true,
+};

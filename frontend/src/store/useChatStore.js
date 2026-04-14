@@ -2,6 +2,9 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "./useAuthStore";
+import { AI_ASSISTANT_USER } from "../constants";
+
+const ASSISTANT_ID = AI_ASSISTANT_USER._id;
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -15,7 +18,7 @@ export const useChatStore = create((set, get) => ({
     set({ isUsersLoading: true });
     try {
       const res = await axiosInstance.get("/messages/users");
-      set({ users: res.data });
+      set({ users: [AI_ASSISTANT_USER, ...res.data] });
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -26,7 +29,8 @@ export const useChatStore = create((set, get) => ({
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
     try {
-      const res = await axiosInstance.get(`/messages/${userId}`);
+      const endpoint = userId === ASSISTANT_ID ? "/assistant/history" : `/messages/${userId}`;
+      const res = await axiosInstance.get(endpoint);
       set((state) => ({
         messages: res.data,
         unreadCounts: {
@@ -42,7 +46,21 @@ export const useChatStore = create((set, get) => ({
   },
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
+    if (!selectedUser) return;
+
     try {
+      if (selectedUser._id === ASSISTANT_ID) {
+        const text = messageData?.text?.trim();
+        if (!text) {
+          toast.error("Please type a message for the assistant");
+          return;
+        }
+
+        const res = await axiosInstance.post("/assistant/chat", { message: text });
+        set({ messages: [...messages, res.data.userMessage, res.data.assistantMessage] });
+        return;
+      }
+
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
@@ -62,6 +80,8 @@ export const useChatStore = create((set, get) => ({
 
     socket.on("newMessage", (newMessage) => {
       const { selectedUser, messages } = get();
+      if (!selectedUser || selectedUser._id === ASSISTANT_ID) return;
+
       const isMessageFromOpenChat = selectedUser && newMessage.senderId === selectedUser._id;
 
       if (isMessageFromOpenChat) {

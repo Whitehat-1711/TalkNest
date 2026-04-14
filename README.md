@@ -19,6 +19,8 @@ JWT_SECRET=your_jwt_secret
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=llama-3.3-70b-versatile
 
 NODE_ENV=production
 CORS_ORIGIN=http://51.20.210.18,http://51.20.210.18:5001
@@ -35,7 +37,7 @@ VITE_SERVER_BASE_URL=http://51.20.210.18:5001
 
 Notes:
 
-- Use your own values for MongoDB, JWT, and Cloudinary.
+- Use your own values for MongoDB, JWT, Cloudinary, and Groq API key.
 - If frontend and backend are hosted on different HTTPS domains, use `COOKIE_SAME_SITE=none` and `COOKIE_SECURE=true`.
 
 ## 2. Build and Run

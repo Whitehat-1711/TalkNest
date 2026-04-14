@@ -8,7 +8,8 @@ const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  const { sendMessage, selectedUser } = useChatStore();
+  const isAssistantChat = selectedUser?.isAssistant;
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -36,7 +37,7 @@ const MessageInput = () => {
     try {
       await sendMessage({
         text: text.trim(),
-        image: imagePreview,
+        image: isAssistantChat ? null : imagePreview,
       });
 
       // Clear form
@@ -85,7 +86,7 @@ const MessageInput = () => {
           <input
             type="text"
             className="w-full input input-bordered rounded-lg input-sm sm:input-md"
-            placeholder="Type a message..."
+            placeholder={isAssistantChat ? "Ask anything..." : "Type a message..."}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
@@ -102,6 +103,7 @@ const MessageInput = () => {
             className={`hidden sm:flex btn btn-circle
                      ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
             onClick={() => fileInputRef.current?.click()}
+            disabled={isAssistantChat}
             whileHover={{ y: -1 }}
             whileTap={{ scale: 0.96 }}
           >

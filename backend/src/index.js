@@ -10,6 +10,7 @@ import { connectDB } from "./lib/db.js";
 
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
+import assistantRoutes from "./routes/assistant.route.js";
 import { app, server } from "./lib/socket.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,7 @@ app.use(cors(corsOptions));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/assistant", assistantRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(frontendDistPath));
