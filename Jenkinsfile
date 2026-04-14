@@ -42,7 +42,9 @@ pipeline {
 
           ssh -i "$SSH_KEY" "$SSH_USER@$DEPLOY_HOST" "set -e; \
             cd '$DEPLOY_DIR'; \
-            git pull; \
+            git fetch --all --prune; \
+            git reset --hard origin/main; \
+            git clean -fd; \
             npm install --prefix backend; \
             npm install --prefix frontend; \
             npm run build; \
